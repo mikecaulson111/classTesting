@@ -217,7 +217,7 @@ void edit_subject(person *p) {
                                 if (stoi(temp) == 0) {
                                     cout << "Enter the name for the assignment:" << endl;
                                     getline(cin,temp,'\n');
-                                    sub.grades.at(place1).name = temp;
+                                    sub.grades.at(place1).assignment_name = temp;
                                 } else if (stoi(temp) == 1) {
                                     cout << "Enter the grade:" << endl;
                                     getline(cin,temp,'\n');
