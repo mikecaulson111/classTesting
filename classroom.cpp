@@ -188,8 +188,68 @@ person *classroom::get_person(int place) {
 }
 
 void edit_subject(person *p) {
+    string temp;
     cout << "Editing Subject or Assignment" << endl;
     print_assignments(*p, 1);
+    cout << "Choose the number of the subject shown above that you wish to edit:" << endl;
+    getline(cin, temp, '\n');
+    if (is_numb(temp)) {
+        int place = stoi(temp);
+        if (place < p->subjects.size()) {
+            subject sub = p->subjects.at(place);
+            cout << "Please enter [0] if you want to edit the name of the subject, and [1] if you wish to edit one of the assignments" << endl;
+            getline(cin, temp, '\n');
+            if (is_numb(temp)) {
+                if (stoi(temp) == 0) {
+                    cout << "Please enter the name for the subject:" << endl;
+                    getline(cin, temp, '\n');
+                    sub.name = temp;
+                } else if (stoi(temp) == 1) {
+                    print_assignments(*p, 2);
+                    cout << "Please enter the number of the assignment from above you wish to edit:" << endl;
+                    getline(cin, temp, '\n');
+                    if (is_numb(temp)) {
+                        int place1 = stoi(temp);
+                        if (place1 < sub.grades.size()) {
+                            cout << "Please enter [0] if you wish to change the name of the assignment or [1] if you wish to change the grade:" << endl;
+                            getline(cin, temp, '\n');
+                            if (is_numb(temp)) {
+                                if (stoi(temp) == 0) {
+                                    cout << "Enter the name for the assignment:" << endl;
+                                    getline(cin,temp,'\n');
+                                    sub.grades.at(place1).name = temp;
+                                } else if (stoi(temp) == 1) {
+                                    cout << "Enter the grade:" << endl;
+                                    getline(cin,temp,'\n');
+                                    if(is_numb(temp, true)) {
+                                        sub.grades.at(place1).grade = stof(temp);
+                                    } else {
+                                        cout << "Please only enter a number for the grade, try again" << endl;
+                                    }
+                                } else {
+                                    cout << "Please only enter a number between 0 and 1, try again" << endl;
+                                }
+                            } else {
+                                cout << "Please only enter a number for the assignment, try again" << endl;
+                            }
+                        } else {
+                            cout << "Please only enter a number that is displayed on the screen, try again" << endl;
+                        }
+                    } else {
+                        cout << "Please enter a number for the assignment, try again" << endl;
+                    }
+                } else {
+                    cout << "Please only enter a number between 0 and 1, try again" << endl;
+                }
+            } else {
+                cout << "Please only enter a number for the subject, try again" << endl;
+            }
+        } else {
+            cout << "Please only enter a number that is displayed on the screen, try again" << endl;
+        }
+    } else {
+        cout << "Please only enter a number for the subject, try again" << endl;
+    }
 }
 
 void classroom::edit_student() {
