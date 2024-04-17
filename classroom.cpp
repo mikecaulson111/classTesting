@@ -23,6 +23,21 @@ float classroom::calculate_average() {
     return tot;
 }
 
+float calculate_student_average(person *p) {
+    float total = 0.0;
+    float count = 0;
+    if (p->subjects.size() > 0) {
+        for (subject sub : p->subjects) {
+            for(assignment_grade ass : sub.grades) {
+                total += ass.grade;
+                count++;
+            }
+        }
+        total /= count;
+    }
+    return total;
+}
+
 void classroom::change_dimensions(int l, int w, int h) {
     this->width = w;
     this->length = l;
@@ -37,6 +52,7 @@ int classroom::get_num_students() {
 
 void classroom::add_student(person *p) {
     // cout << "why here" << endl;
+    p->avg = calculate_student_average(p);
 
     this->students.push_back(*p);
     this->num_students += 1;
@@ -196,33 +212,34 @@ void edit_subject(person *p) {
     if (is_numb(temp)) {
         int place = stoi(temp);
         if (place < p->subjects.size()) {
-            subject sub = p->subjects.at(place);
+            subject *sub = &p->subjects.at(place);
             cout << "Please enter [0] if you want to edit the name of the subject, and [1] if you wish to edit one of the assignments" << endl;
             getline(cin, temp, '\n');
             if (is_numb(temp)) {
                 if (stoi(temp) == 0) {
                     cout << "Please enter the name for the subject:" << endl;
                     getline(cin, temp, '\n');
-                    sub.name = temp;
+                    sub->name = temp;
                 } else if (stoi(temp) == 1) {
                     print_assignments(*p, 2);
                     cout << "Please enter the number of the assignment from above you wish to edit:" << endl;
                     getline(cin, temp, '\n');
                     if (is_numb(temp)) {
                         int place1 = stoi(temp);
-                        if (place1 < sub.grades.size()) {
+                        if (place1 < sub->grades.size()) {
                             cout << "Please enter [0] if you wish to change the name of the assignment or [1] if you wish to change the grade:" << endl;
                             getline(cin, temp, '\n');
                             if (is_numb(temp)) {
                                 if (stoi(temp) == 0) {
                                     cout << "Enter the name for the assignment:" << endl;
                                     getline(cin,temp,'\n');
-                                    sub.grades.at(place1).assignment_name = temp;
+                                    sub->grades.at(place1).assignment_name = temp;
                                 } else if (stoi(temp) == 1) {
                                     cout << "Enter the grade:" << endl;
                                     getline(cin,temp,'\n');
                                     if(is_numb(temp, true)) {
-                                        sub.grades.at(place1).grade = stof(temp);
+                                        sub->grades.at(place1).grade = stof(temp);
+                                        p->avg = calculate_student_average(p);
                                     } else {
                                         cout << "Please only enter a number for the grade, try again" << endl;
                                     }
@@ -299,11 +316,11 @@ void classroom::edit_student() {
                         edit_subject(p);
                         break;
                     default:
-                        cout << "Please only enter a number between 1 and 4" << endl;
+                        cout << "Please only enter a number between 1 and 5" << endl;
                 }
                 cout << "\n" << endl;
             } else {
-                cout << "Please only enter a number for between 1 and 4" << endl;
+                cout << "Please only enter a number for between 1 and 5" << endl;
             }
 
         } else {

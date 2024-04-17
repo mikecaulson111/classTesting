@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <fstream>
 
 #include "classroom.hpp"
 #include "person.hpp"
@@ -18,6 +19,29 @@ using namespace std;
 //     return true;
 // }
 
+void saver(classroom *classroom, string s) {
+    fstream fout;
+
+    fout.open(s, ios::out | ios::app);
+
+    for (int i = 0; i < classroom->get_num_students(); i++) {
+        // cout << classroom->get_person(i)->fname << endl;
+        person *p = classroom->get_person(i);
+        fout << p->lname << "," << p->fname << "," << p->age << "," << p->is_male << "," << p->avg << ",";
+        fout << p->subjects.size() << ",";
+        for (subject sub : p->subjects) {
+            fout << sub.name << ",";
+            fout << sub.grades.size() << ",";
+            for (assignment_grade ass : sub.grades) {
+                fout << ass.assignment_name << "," << ass.grade << ",";
+            }
+        }
+        fout << '\n';
+    }
+
+    fout.close();
+}
+
 int main(int argc, char* argv[]) {
     cout << "Hello world" << endl;
     classroom classroom1;
@@ -29,7 +53,7 @@ int main(int argc, char* argv[]) {
 
     while(cont) {
         cout << "Please Enter the number of what you would like to do:" << endl;
-        cout << "[1] Add new student \n[2] Print list of students\n[3] Get number of students\n[4] Edit student" << endl;
+        cout << "[1] Add new student \n[2] Print list of students\n[3] Get number of students\n[4] Edit student\n[0] Quit\n" << endl;
         getline(cin, answer, '\n');
         // cout << answer << endl;
         int temp;
@@ -44,6 +68,11 @@ int main(int argc, char* argv[]) {
                 cout << "There are currently: " << classroom1.get_num_students() << " students in this class." << endl;
             } else if (temp == 4) {
                 classroom1.edit_student();
+            } else if (temp == 9) {
+                string temp_str;
+                cout << "Enter the name of the the file to write save to:" << endl;
+                getline(cin, temp_str, '\n');
+                saver(&classroom1, temp_str);
             } else if (temp == 0) {
                 cont = false;
             }
