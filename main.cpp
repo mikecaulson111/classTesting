@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <sstream>
 
 #include "classroom.hpp"
 #include "person.hpp"
@@ -42,6 +43,52 @@ void saver(classroom *classroom, string s) {
     fout.close();
 }
 
+void loader(classroom *classroom, string s) {
+    fstream fin;
+    fin.open(s, ios::in);
+
+    vector<string> row;
+    string temp, line, word;
+    while (getline(fin, temp)) {
+        row.clear();
+        stringstream s(temp);
+        while(getline(s,word,',')) {
+            row.push_back(word);
+        }
+
+        person p;
+        p.fname = row.at(1);
+        p.lname = row.at(0);
+        cout << row.at(2) << endl;
+        p.age = stoi(row.at(2));
+        p.is_male = bool(stoi(row.at(3)));
+        p.avg = stof(row.at(4));
+        int sub_size = stoi(row.at(5));
+        int overall = 6;
+        for (int i = 0; i < sub_size; i++) {
+            subject s;
+            s.name = row.at(overall);
+            overall++;
+            int ass_size = stoi(row.at(overall));
+            overall++;
+            for (int j = 0; j < ass_size; j++) {
+                assignment_grade ass;
+                ass.assignment_name = row.at(overall);
+                overall++;
+                ass.grade = stof(row.at(overall));
+                overall++;
+                s.grades.push_back(ass);
+            }
+            p.subjects.push_back(s);
+        }
+
+        classroom->add_student(&p);
+    }
+
+    fin.close();
+}
+
+
 int main(int argc, char* argv[]) {
     cout << "Hello world" << endl;
     classroom classroom1;
@@ -73,6 +120,11 @@ int main(int argc, char* argv[]) {
                 cout << "Enter the name of the the file to write save to:" << endl;
                 getline(cin, temp_str, '\n');
                 saver(&classroom1, temp_str);
+            } else if (temp == 8) {
+                string temp_str;
+                cout << "Enter the name of the file to read from:" << endl;
+                getline(cin, temp_str, '\n');
+                loader(&classroom1, temp_str);
             } else if (temp == 0) {
                 cont = false;
             }
