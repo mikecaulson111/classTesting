@@ -1,7 +1,9 @@
 #include <iostream>
+#include <string>
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <sys/stat.h>
 
 #include "classroom.hpp"
 #include "person.hpp"
@@ -10,20 +12,20 @@
 using namespace std;
 
 
-// bool is_number(string &s) {
-//     // return !s.empty() && std::all_of(s.begin(), s.end(), ::isdigit);
-//     for(int i = 0; i < s.length(); i++) {
-//         if (s[i] > 57 || s[i] < 48) {
-//             return false;
-//         }
-//     }
-//     return true;
-// }
-
 void saver(classroom *classroom, string s) {
+    const char* path = "./saves";
+    struct stat sb;
+    if (stat(path, &sb) != 0) {
+        mkdir("saves", 0777);
+    }
+
     fstream fout;
 
-    fout.open(s, ios::out | ios::app);
+    if (s.substr(s.length()-4, 4).compare(".csv") == 0) {
+        fout.open("./saves/" + s, ios::out | ios::app);
+    } else {
+        fout.open("./saves/" + s + ".csv", ios::out | ios::app);
+    }
 
     for (int i = 0; i < classroom->get_num_students(); i++) {
         // cout << classroom->get_person(i)->fname << endl;
@@ -45,7 +47,11 @@ void saver(classroom *classroom, string s) {
 
 void loader(classroom *classroom, string s) {
     fstream fin;
-    fin.open(s, ios::in);
+    if (s.substr(s.length()-4, 4).compare(".csv") == 0) {
+        fin.open("./saves/" + s, ios::in);
+    } else {
+        fin.open("./saves/" + s + ".csv", ios::in);
+    }
 
     vector<string> row;
     string temp, line, word;
@@ -59,7 +65,6 @@ void loader(classroom *classroom, string s) {
         person p;
         p.fname = row.at(1);
         p.lname = row.at(0);
-        cout << row.at(2) << endl;
         p.age = stoi(row.at(2));
         p.is_male = bool(stoi(row.at(3)));
         p.avg = stof(row.at(4));
@@ -88,6 +93,13 @@ void loader(classroom *classroom, string s) {
     fin.close();
 }
 
+// void print_saves() {
+//     string path = "./saves/";
+// 
+//     for(const auto & entry ; fs::directory_iterator(path)) {
+//         cout << entry.path() << endl;
+// }
+
 
 int main(int argc, char* argv[]) {
     cout << "Hello world" << endl;
@@ -100,7 +112,9 @@ int main(int argc, char* argv[]) {
 
     while(cont) {
         cout << "Please Enter the number of what you would like to do:" << endl;
-        cout << "[1] Add new student \n[2] Print list of students\n[3] Get number of students\n[4] Edit student\n[0] Quit\n" << endl;
+        cout << "[1] Add new student \n[2] Print list of students\n[3] Get number of students\n[4] Edit student\n";
+        cout << "[8] Load file\n[9] Save current class to file\n";
+        cout << "[0] Quit\n" << endl;
         getline(cin, answer, '\n');
         // cout << answer << endl;
         int temp;
@@ -124,7 +138,12 @@ int main(int argc, char* argv[]) {
                 string temp_str;
                 cout << "Enter the name of the file to read from:" << endl;
                 getline(cin, temp_str, '\n');
-                loader(&classroom1, temp_str);
+                if (is_numb(temp_str) && 1 == stoi(temp_str)) {
+                    // print_saves();
+                    cout << "Listing saves is coming soon..." << endl;
+                } else {
+                    loader(&classroom1, temp_str);
+                }
             } else if (temp == 0) {
                 cont = false;
             }
