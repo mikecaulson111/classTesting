@@ -28,7 +28,6 @@ void saver(classroom *classroom, string s) {
     }
 
     for (int i = 0; i < classroom->get_num_students(); i++) {
-        // cout << classroom->get_person(i)->fname << endl;
         person *p = classroom->get_person(i);
         fout << p->lname << "," << p->fname << "," << p->age << "," << p->is_male << "," << p->avg << ",";
         fout << p->subjects.size() << ",";
@@ -104,11 +103,8 @@ void loader(classroom *classroom, string s) {
 
 
 int main(int argc, char* argv[]) {
-    cout << "Hello world" << endl;
     classroom classroom1;
     
-    // person *p1 = NULL;
-
     bool cont = true;
     string answer;
 
@@ -118,7 +114,6 @@ int main(int argc, char* argv[]) {
         cout << "[8] Load file\n[9] Save current class to file\n";
         cout << "[0] Quit\n" << endl;
         getline(cin, answer, '\n');
-        // cout << answer << endl;
         int temp;
         if (is_numb(answer)) {
             temp = stoi(answer);
@@ -154,39 +149,5 @@ int main(int argc, char* argv[]) {
         }
 
     }
-
-    // p1 = new person;
-    // p1->fname = "Michael";
-    // p1->lname = "Caulson";
-    // p1->age = 14;
-    // p1->is_male = true;
-    // p1->avg = 0.5;
-
-    // cout << p1->fname << endl;
-
-    // classroom1.add_student(p1);
-
-    // free(p1);
-    // p1 = NULL;
-
-    // p1 = new person;
-    // p1->fname = "Mia";
-    // p1->lname = "Kilkenny";
-    // p1->age = 16;
-    // p1->is_male = false;
-    // p1->avg = 0.99;
-
-
-    // classroom1.add_student(p1);
-
-    // classroom1.print_students();
-
-    // free(p1);
-    // p1 = NULL;
-
-    // p1 = make_person();
-
-    // free(p1);
-    // p1 = NULL;
 
 }
