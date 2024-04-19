@@ -9,6 +9,7 @@ using namespace std;
 typedef struct assignment_grade_t {
     string assignment_name;
     float grade;
+    float weight;
 } assignment_grade;
 
 typedef struct subject_t {

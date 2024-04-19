@@ -26,15 +26,30 @@ float classroom::calculate_average() {
 float calculate_student_average(person *p) {
     float total = 0.0;
     float count = 0;
+    float class_count = 0;
     if (p->subjects.size() > 0) {
         for (subject sub : p->subjects) {
+            float temp_tot = 0;
             for(assignment_grade ass : sub.grades) {
+                temp_tot += (ass.grade * (ass.weight / 100.));
+            }
+            p->subjects.at(class_count).grade = temp_tot;
+            total += temp_tot;
+            class_count++;
+        }
+        total /= class_count;
+    }
+
+    if (p->subjects.size() > 0 && total == 0.0) {
+        for (subject sub : p->subjects) {
+            for (assignment_grade ass : sub.grades) {
                 total += ass.grade;
                 count++;
             }
         }
         total /= count;
     }
+
     return total;
 }
 
@@ -59,7 +74,7 @@ void classroom::add_student(person *p) {
     // cout << "size: " << students.size() << endl;
 }
 
-void print_assignments(person p, int show_nums=0) {
+void print_assignments(person p, int show_nums=0, int sub_num=-1) {
     cout << "\033[0;32m";
     cout << "\tSubjects:" << "\033[0m" << endl;
     int counter = 0;
@@ -68,14 +83,16 @@ void print_assignments(person p, int show_nums=0) {
         if (show_nums == 1) {
             cout << "[" << "\033[0;31m" << counter << "\033[0m] ";
         }
-        cout << sub.name << ":" << endl;
+        cout << sub.name << " (" << sub.grade << ")" << ":" << endl;
         int counter1 = 0;
         for (assignment_grade ass : sub.grades) {
             cout << "\t\t\t";
-            if (show_nums == 2) {
-                cout << "[\033[0;31m" << counter1 << "\033[0m] ";
+            if (show_nums == 2 && sub_num != -1) {
+                if (counter == sub_num) {
+                    cout << "[\033[0;31m" << counter1 << "\033[0m] ";
+                }
             }
-            cout << ass.assignment_name << " : " << ass.grade << endl;
+            cout << ass.assignment_name << " : " << ass.grade << "(" << ass.weight << "%)" << endl;
             counter1++;
         }
         counter++;
@@ -171,10 +188,19 @@ void classroom::make_person() {
                         getline(cin, temp, '\n');
                         if (is_numb(temp, true)) {
                             assignment.grade = stof(temp);
+                            cout << "Please enter the weight for the assignment(as a percentage):" << endl;
+                            getline(cin, temp, '\n');
+                            if ( is_numb(temp,true)) {
+                                assignment.weight = stof(temp);
+                            } else {
+                                cout << "Weight was not entered correctly, entering 0" << endl;
+                                assignment.weight = 0;
+                            }
                             sub.grades.push_back(assignment);
                         } else {
                             cout << "That was not a recognized number, not adding assignment, try again" << endl;
                         }
+                        
                     }
                     p->subjects.push_back(sub);
                 } else {
@@ -221,13 +247,13 @@ void edit_subject(person *p) {
                     getline(cin, temp, '\n');
                     sub->name = temp;
                 } else if (stoi(temp) == 1) {
-                    print_assignments(*p, 2);
+                    print_assignments(*p, 2, place);
                     cout << "Please enter the number of the assignment from above you wish to edit:" << endl;
                     getline(cin, temp, '\n');
                     if (is_numb(temp)) {
                         int place1 = stoi(temp);
                         if (place1 < sub->grades.size()) {
-                            cout << "Please enter [0] if you wish to change the name of the assignment or [1] if you wish to change the grade:" << endl;
+                            cout << "Please enter [0] if you wish to change the name of the assignment, [1] if you wish to change the grade, or [2] if you wish to change the weight:" << endl;
                             getline(cin, temp, '\n');
                             if (is_numb(temp)) {
                                 if (stoi(temp) == 0) {
@@ -242,6 +268,15 @@ void edit_subject(person *p) {
                                         p->avg = calculate_student_average(p);
                                     } else {
                                         cout << "Please only enter a number for the grade, try again" << endl;
+                                    }
+                                } else if (stoi(temp) == 2) {
+                                    cout << "Enter the weight:" << endl;
+                                    getline(cin, temp, '\n');
+                                    if (is_numb(temp,true)) {
+                                        sub->grades.at(place1).weight = stof(temp);
+                                        p->avg = calculate_student_average(p);
+                                    } else {
+                                        cout << "Please only enter a number for the weight" << endl;
                                     }
                                 } else {
                                     cout << "Please only enter a number between 0 and 1, try again" << endl;

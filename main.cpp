@@ -36,7 +36,7 @@ void saver(classroom *classroom, string s) {
             fout << sub.name << ",";
             fout << sub.grades.size() << ",";
             for (assignment_grade ass : sub.grades) {
-                fout << ass.assignment_name << "," << ass.grade << ",";
+                fout << ass.assignment_name << "," << ass.grade << "," << ass.weight << ",";
             }
         }
         fout << '\n';
@@ -81,6 +81,8 @@ void loader(classroom *classroom, string s) {
                 ass.assignment_name = row.at(overall);
                 overall++;
                 ass.grade = stof(row.at(overall));
+                overall++;
+                ass.weight = stof(row.at(overall));
                 overall++;
                 s.grades.push_back(ass);
             }
