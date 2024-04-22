@@ -8,6 +8,11 @@
 #include <vector>
 #include <iomanip>
 
+#define RED "\033[0;31m"
+#define NORMAL "\033[0m"
+#define GREEN "\033[0;32m"
+#define YELLOW "\033[0;33m"
+
 using namespace std;
 
 
@@ -79,9 +84,10 @@ void print_assignments(person p, int show_nums=0, int sub_num=-1) {
     for (subject sub : p.subjects) {
         cout << "\t\t";
         if (show_nums == 1) {
-            cout << "[" << "\033[0;31m" << counter << "\033[0m] ";
+            //cout << "[" << "\033[0;31m" << counter << "\033[0m] ";
+            cout << "[" << RED << counter << "\033[0m] ";
         }
-        cout << sub.name << " (" << sub.grade << ")" << ":" << endl;
+        cout << sub.name << " (" << (sub.grade >= 80 ? GREEN : (sub.grade >= 60 ? YELLOW : RED)) << sub.grade << NORMAL << ")" << ":" << endl;
         int counter1 = 0;
         for (assignment_grade ass : sub.grades) {
             cout << "\t\t\t";
@@ -90,7 +96,7 @@ void print_assignments(person p, int show_nums=0, int sub_num=-1) {
                     cout << "[\033[0;31m" << counter1 << "\033[0m] ";
                 }
             }
-            cout << ass.assignment_name << " : " << ass.grade << "(" << ass.weight << "%)" << endl;
+            cout << ass.assignment_name << " : " << (ass.grade >= 80 ? GREEN : (ass.grade >= 60 ? YELLOW : RED)) << ass.grade << NORMAL << "(" << ass.weight << "%)" << endl;
             counter1++;
         }
         counter++;
