@@ -110,7 +110,7 @@ int main(int argc, char* argv[]) {
 
     while(cont) {
         cout << "Please Enter the number of what you would like to do:" << endl;
-        cout << "[1] Add new student \n[2] Print list of students\n[3] Get number of students\n[4] Edit student\n";
+        cout << "[1] Add new student \n[2] Print list of students\n[3] Get number of students\n[4] Edit student\n[5] Print Subjects for Student\n";
         cout << "[8] Load file\n[9] Save current class to file\n";
         cout << "[0] Quit\n" << endl;
         getline(cin, answer, '\n');
@@ -126,6 +126,8 @@ int main(int argc, char* argv[]) {
                 cout << "There are currently: " << classroom1.get_num_students() << " students in this class." << endl;
             } else if (temp == 4) {
                 classroom1.edit_student();
+            } else if (temp == 5) {
+                classroom1.print_student_subjects();
             } else if (temp == 9) {
                 string temp_str;
                 cout << "Enter the name of the the file to write save to:" << endl;

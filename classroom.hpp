@@ -33,7 +33,8 @@ class classroom {
         void edit_student();
         person *get_person(int place);
 
-        void print_students(bool show_nums);
+        void print_students(bool show_nums, bool show_assignments=false);
+        void print_student_subjects();
         int get_num_students();
 
 };

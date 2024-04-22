@@ -103,7 +103,7 @@ void print_assignments(person p, int show_nums=0, int sub_num=-1) {
     }
 }
 
-void classroom::print_students(bool show_nums) {
+void classroom::print_students(bool show_nums, bool show_assignments) {
     cout << endl;
     if (show_nums) {
         cout << " [num] ";
@@ -131,7 +131,7 @@ void classroom::print_students(bool show_nums) {
         cout << " | ";
         cout << std::setw(3) << p.avg << endl;
 
-        if (p.subjects.size() > 0) {
+        if (show_assignments && p.subjects.size() > 0) {
             print_assignments(p);
         }
     }
@@ -427,6 +427,7 @@ void classroom::edit_student() {
         person_num = stoi(temp);
         if (person_num < get_num_students()) {
             p = get_person(person_num);
+            print_students(false, true);
             cout << "Editing for " << p->fname << " " << p->lname << endl;
             cout << "Enter the number of what you would like to edit:\n[1] First Name\n[2] Last Name\n[3] Age\n[4] Sex\n[5] Subject/Assignment\n" << endl;
             getline(cin, temp, '\n');
@@ -473,5 +474,20 @@ void classroom::edit_student() {
         }
     } else {
         cout << "Please only enter a number, no letters\n" << endl;
+    }
+}
+
+void classroom::print_student_subjects() {
+    string temp;
+    person *p = NULL;
+    print_students(true);
+    cout << "Please enter the number of the student you would like to see the subjects and assignments for:" << endl;
+    getline(cin, temp, '\n');
+    if (is_numb(temp)) {
+        p = get_person(stoi(temp));
+        cout << "Subject Information for: " << p->fname << " " << p->lname << ":" << endl;
+        print_assignments(*p);
+    } else {
+        cout << "Please only enter a number for the student" <<  endl;
     }
 }
