@@ -21,7 +21,7 @@ void saver(classroom *classroom, string s) {
 
     fstream fout;
 
-    if (s.substr(s.length()-4, 4).compare(".csv") == 0) {
+    if (s.length() > 4 && s.substr(s.length()-4, 4).compare(".csv") == 0) {
         fout.open("./saves/" + s, ios::out | ios::app);
     } else {
         fout.open("./saves/" + s + ".csv", ios::out | ios::app);
@@ -46,7 +46,7 @@ void saver(classroom *classroom, string s) {
 
 void loader(classroom *classroom, string s) {
     fstream fin;
-    if (s.substr(s.length()-4, 4).compare(".csv") == 0) {
+    if (s.length() > 4 && s.substr(s.length()-4, 4).compare(".csv") == 0) {
         fin.open("./saves/" + s, ios::in);
     } else {
         fin.open("./saves/" + s + ".csv", ios::in);

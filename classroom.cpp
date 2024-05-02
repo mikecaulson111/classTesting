@@ -77,7 +77,7 @@ void classroom::add_student(person *p) {
     this->num_students += 1;
 }
 
-void print_assignments(person p, int show_nums=0, int sub_num=-1) {
+void print_assignments(person p, int show_nums=0, int sub_num=-1, int just_subjects=-1) {
     cout << "\033[0;32m";
     cout << "\tSubjects:" << "\033[0m" << endl;
     int counter = 0;
@@ -101,6 +101,33 @@ void print_assignments(person p, int show_nums=0, int sub_num=-1) {
         }
         counter++;
     }
+    // cout << "\033[0;32m";
+    // cout << "\tSubjects:" << "\033[0m" << endl;
+    // int counter = 0;
+    // for (int i = 0; i < p.subjects.size(); i++) {
+    //     subject sub = p.subjects.at(i);
+    //     cout << "\t\t";
+    //     if (show_nums == 1) {
+    //         //cout << "[" << "\033[0;31m" << counter << "\033[0m] ";
+    //         cout << "[" << RED << counter << "\033[0m] ";
+    //     }
+    //     cout << sub.name << " (" << (sub.grade >= 80 ? GREEN : (sub.grade >= 60 ? YELLOW : RED)) << sub.grade << NORMAL << ")" << ":" << endl;
+    //     int counter1 = 0;
+    //     if (-2 == just_subjects || i == just_subjects) {
+    //         for (int j = 0; j < sub.grades.size(); j++) {
+    //             assignment_grade ass = sub.grades.at(j);
+    //             cout << "\t\t\t";
+    //             if (show_nums == 2 && sub_num != -1) {
+    //                 if (counter == sub_num) {
+    //                     cout << "[\033[0;31m" << counter1 << "\033[0m] ";
+    //                 }
+    //             }
+    //             cout << ass.assignment_name << " : " << (ass.grade >= 80 ? GREEN : (ass.grade >= 60 ? YELLOW : RED)) << ass.grade << NORMAL << "(" << ass.weight << "%)" << endl;
+    //             counter1++;
+    //         }
+    //     }
+    //     counter++;
+    // }
 }
 
 void classroom::print_students(bool show_nums, bool show_assignments) {
